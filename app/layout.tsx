@@ -4,6 +4,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "next-themes";
 import { Navigation } from "@/components/Navigation";
+import AuthProvider from "@/components/AuthProvider";
 
 const inter = Inter({subsets:['latin'],variable:'--font-sans'});
 
@@ -41,10 +42,11 @@ export default function RootLayout({
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange
-        >
+        />
+        <AuthProvider>
           <Navigation/>
           {children}
-        </ThemeProvider>
+        </AuthProvider>
       </body>
     </html>
   );
