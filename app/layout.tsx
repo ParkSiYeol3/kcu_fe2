@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { ThemeProvider } from "next-themes";
 import { Navigation } from "@/components/Navigation";
 import AuthProvider from "@/components/AuthProvider";
+import { UserInfoProvider } from "@/contexts/UserInfoContext";
 
 const inter = Inter({subsets:['latin'],variable:'--font-sans'});
 
@@ -44,8 +45,10 @@ export default function RootLayout({
           disableTransitionOnChange
         />
         <AuthProvider>
+          <UserInfoProvider>
           <Navigation/>
           {children}
+          </UserInfoProvider>
         </AuthProvider>
       </body>
     </html>

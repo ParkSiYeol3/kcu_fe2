@@ -2,6 +2,7 @@ import { PokemonTypeKey } from "@/config/pokemonTypes";
 import { notFound } from "next/navigation";
 
 export interface PokemonProps {
+    id: number,
     name: string,
     koName: string,
     types: PokemonTypeKey[],
@@ -38,6 +39,7 @@ export async function getPokemon(id:string): Promise<PokemonProps> {
         const speciesData = await speciesRes.json();
 
         const result = {
+            id: data.id,
             name: data.name,
             koName: speciesData.names.find( (n:{language: {name:string}}) => n.language.name === 'ko' ) ?.name,
             types: data.types?.map( (t:{type: {name:string}}) => t.type.name ),
