@@ -4,11 +4,14 @@ import { getAllTypeNames, PokemonTypeKey } from "@/config/pokemonTypes";
 import { useState } from "react";
 import TypeBadge from "./TypeBadge";
 import { useRouter, useSearchParams } from "next/navigation";
+import { usePokeTypeStore } from "@/store/pokeTypeStore";
 
 export default function TypeFilter() {
     // const [seclectedTypes, setSelectedTypes] = useState<PokemonTypeKey[]>([]);
     const route = useRouter();
     const searchParams = useSearchParams();
+
+    const {selectedTypes, toggleType, resetTypes} = usePokeTypeStore()
 
     const typeParam = searchParams.get("type");
     const seclectedTypes = typeParam ? typeParam.split(",") : [];

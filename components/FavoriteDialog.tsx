@@ -1,5 +1,6 @@
 import { useUserInfo } from "@/contexts/UserInfoContext";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "./ui/alert-dialog";
+import { useUserStore } from "@/store/userStore";
 
 interface favoritesProps {
   open: boolean,
@@ -11,14 +12,17 @@ interface favoritesProps {
 export default function FavoriteDialog({
   open, onOpenChange, pokemonId, pokemonName
 } : favoritesProps) {
-  const {favorites, setFavorites} = useUserInfo();
+  const favorites = useUserStore((state)=> state.favorites);
+  const addFavorite = useUserStore((state)=> state.addFavorite);
+  const removeFavorite = useUserStore((state)=> state.removeFavorite);
+
   const isFavorited = favorites.includes(pokemonId);
 
   async function handleConfirm() {
     if(isFavorited) {
       // DB에서 좋아요 삭제
       await fetch(`/api/favorites?pokemon_id=${pokemonId}`, {method: "DELETE"})
-      setFavorites((prev)=> prev.filter(id=>id !== pokemonId))
+      removeFavorite(pokemonId);
     } else {
       // DB에서 좋아요 추가
       await fetch('api/favorites', {
@@ -26,7 +30,7 @@ export default function FavoriteDialog({
         headers: {'Content-Type':'application/json'},
         body: JSON.stringify({pokemon_id:pokemonId})
       });
-      setFavorites((prev)=>[...prev, pokemonId])
+      addFavorite(pokemonId);
     }
     onOpenChange(false);
   }

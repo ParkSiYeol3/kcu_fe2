@@ -4,6 +4,7 @@ import { PokemonPagination } from "@/components/PokemonPagination";
 import TypeFilter from "@/components/TypeFilter";
 import { getPokemon, getPokemonByTypes } from "@/lib/pokeAPI";
 import { redirect } from "next/navigation";
+
 import { Suspense } from "react";
 
 async function PokemonItem({id}:{id:string}) {
@@ -32,39 +33,38 @@ export default async function Home({searchParams}:{searchParams:Promise<{page?:s
     redirect('/?page=1')
   }
 
-  const selectedTypes = params.type ? params.type.split(',') : [];
-  let pokemondIds: number[];
-  if (selectedTypes.length > 0) {
-    pokemondIds = await getPokemonByTypes(selectedTypes);
+  const selectedTypes = params.type ? params.type.split(',') : []
+  let pokemonIds:number[]
+  if(selectedTypes.length>0) {
+    pokemonIds = await getPokemonByTypes(selectedTypes)
   } else {
-    pokemondIds = Array.from({length: TOTAL_POKEMON}, (_, i) => i + 1);
+    pokemonIds = Array.from({length:TOTAL_POKEMON}, (_,i)=>i+1)
   }
-
-  const totalPages = Math.ceil(pokemondIds.length / ITEMS_PER_PAGE);
-  const validPage = Math.min(currentPage, totalPages);
+  const totalPages = Math.ceil(pokemonIds.length/ITEMS_PER_PAGE)
+  const validPage = Math.min(currentPage, totalPages)
 
   // if (currentPage > totalPages) {
   //   redirect(`/?page=${totalPages}`)
   // }
 
-  const startIdx = (currentPage-1) * ITEMS_PER_PAGE
+  const startIdx = (validPage-1) * ITEMS_PER_PAGE
   const endIdx = startIdx + ITEMS_PER_PAGE
 
-  const displayIds = pokemondIds.slice(startIdx, endIdx);
+  const displayIds = pokemonIds.slice(startIdx, endIdx)
 
   return (
     <main className="w-full mx-auto px-20 py-8">
       <TypeFilter />
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6 m-4">
         {
-          displayIds.length === 0 ? (
+          displayIds.length > 0 ? (
             displayIds.map(id => {
-              return (
+              return(
                 <Suspense
                   key={id}
                   fallback={<PokemonSkeleton/>}
                 >
-                  <PokemonItem id={String(id)} />
+                  <PokemonItem id={String(id)}/>
                 </Suspense>
               )
             })
@@ -74,7 +74,7 @@ export default async function Home({searchParams}:{searchParams:Promise<{page?:s
         }
       </div>
       <div className="flex justify-center py-6">
-        <PokemonPagination
+        <PokemonPagination 
           currentPage={currentPage}
           totalPages={totalPages}
           params={params}

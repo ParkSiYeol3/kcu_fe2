@@ -2,19 +2,28 @@
 
 import { Button } from "@base-ui/react";
 import { useTheme } from "next-themes"
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { FaMoon, FaSun } from "react-icons/fa";
 import Link from "next/link";
 import LoginButton from "./LoginButton";
+import { useSession } from "next-auth/react";
+import { useUserStore } from "@/store/userStore";
 
 export function Navigation() {
     const {theme, setTheme} = useTheme();
     const [mounted, setMounted] = useState(false);
 
+    const {data: session} = useSession();
+    const loadFavorites = useUserStore((state)=> state.loadFavorites);
+
     useEffect( () => {
         // eslint-disable-next-line react-hooks/set-state-in-effect
         setMounted(true)
     }, []);
+
+    useEffect( () => {
+        loadFavorites(session)
+    }, [session, loadFavorites])
 
     return (
         <nav className="border-b mx-3">

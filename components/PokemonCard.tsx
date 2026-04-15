@@ -12,10 +12,11 @@ import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { FaStar } from "react-icons/fa";
 import FavoriteDialog from "./FavoriteDialog";
+import { useUserStore } from "@/store/userStore";
 
 export default function PokemonCard({id, pokemon}:{id:string, pokemon:PokemonProps}) {
 
-  const {favorites, setFavorites} = useUserInfo();
+  const favorites = useUserStore((state)=> state.favorites);
   const [showDialog, setShowDialog] = useState(false);
   const isFavorited = favorites.includes(pokemon.id);
   const {data: session} = useSession();

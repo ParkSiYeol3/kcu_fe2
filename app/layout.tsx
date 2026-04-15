@@ -45,10 +45,10 @@ export default function RootLayout({
           disableTransitionOnChange
         />
         <AuthProvider>
-          <UserInfoProvider>
+          
           <Navigation/>
           {children}
-          </UserInfoProvider>
+        
         </AuthProvider>
       </body>
     </html>
