@@ -51,3 +51,28 @@ export async function getPokemon(id:string): Promise<PokemonProps> {
         throw err;
     }
 }
+
+export async function getPokemonByType(typeName: string): Promise<number[]> {
+    const res = await fetch(`https://pokeapi.co/api/v2/type/${typeName}`, {
+        next:{revalidate:86400} // 24시간
+    })
+    if (!res.ok) return [];
+    
+    const data = await res.json();
+    return data.pokemon.map( (p:{pokemon: {url:string}}) => {
+        const id = parseInt(p.pokemon.url.split('/')[6]);
+        return id;
+    } ).filter( (id: number) => id <= 1025 );
+}
+
+export async function getPokemonByTypes(types: string[]): Promise<number[]> {
+    if (types.length === 0) {
+        return [];
+    }
+    const result = await Promise.all (
+        types.map(type => getPokemonByType(type))
+    )
+    // 연습문제 - getPokemonIdByTypes 완성하기 - 하나의 배열로 합치고, 중복제거, 정렬하기
+    const set = result.flat();
+    return [...set].sort((a,b) => a-b);
+}

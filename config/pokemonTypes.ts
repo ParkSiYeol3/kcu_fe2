@@ -173,5 +173,5 @@ export const getTypeConfig = (typeName:PokemonTypeKey) => {
 }
 
 export const getAllTypeNames = () => {
-    return Object.keys(POKEMON_TYPES)
+    return Object.keys(POKEMON_TYPES) as PokemonTypeKey[]
 }
