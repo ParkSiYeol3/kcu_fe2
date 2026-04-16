@@ -1,13 +1,16 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Inter } from "next/font/google";
+import { Geist, Geist_Mono, Inter, Raleway, DM_Sans } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
-import { ThemeProvider } from "next-themes";
+// import { NextThemeProvider } from "@/components/ThemeProvider";
 import { Navigation } from "@/components/Navigation";
+import { ThemeProvider } from "next-themes";
 import AuthProvider from "@/components/AuthProvider";
 import { UserInfoProvider } from "@/contexts/UserInfoContext";
 
-const inter = Inter({subsets:['latin'],variable:'--font-sans'});
+const dmSansHeading = DM_Sans({subsets:['latin'],variable:'--font-heading'});
+
+const raleway = Raleway({subsets:['latin'],variable:'--font-sans'});
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,24 +35,25 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={cn("h-full", "antialiased", geistSans.variable, geistMono.variable, "font-sans", inter.variable)}
+      className={cn("h-full", "antialiased", geistSans.variable, geistMono.variable, "font-sans", raleway.variable, dmSansHeading.variable)}
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col"
-      suppressHydrationWarning
+        suppressHydrationWarning
       >
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange
-        />
-        <AuthProvider>
-          
-          <Navigation/>
-          {children}
-        
-        </AuthProvider>
+        >
+          <AuthProvider>
+            <UserInfoProvider>
+              <Navigation/>
+              {children}
+            </UserInfoProvider>
+          </AuthProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

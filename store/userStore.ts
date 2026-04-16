@@ -2,13 +2,13 @@ import { Session } from "next-auth";
 import { create } from "zustand";
 
 interface UserState {
-    favorites: number[];
-    setFavorite: (favorites: number[]) => void;
-    addFavorite: (id: number) => void;
-    removeFavorite: (id: number) => void;
-    loadFavorite: (session: Session | null) => Promise<void>;
+  favorites: number[],
+  setFavorite: (favorites:number[]) => void;
+  addFavorite: (id:number) => void;
+  removeFavorite: (id:number) => void;
+  loadFavorites: (session:Session | null) => Promise<void>
 }
-
+// const state = { favorites: []}
 export const useUserStore = create<UserState>( (set) => {
   return {
     favorites: [],
